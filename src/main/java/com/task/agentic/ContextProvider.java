@@ -12,8 +12,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ContextProvider {
+
+    public static final String GROUP_NAME = "Group Name";
+    public static final String GROUP_SUMMARY = "Group Summary";
+    public static final String PRIMARY_OWNER = "Primary Owner";
+    public static final String SECONDARY_OWNER = "Secondary Owner";
+    public static final String GROUP_CLASSIFICATION = "Group Classification";
+    public static final String PRIMARY_OWNER_SUPERVISOR = "Primary Owner Supervisor";
+    public static final String PRIMARY_OWNER_COST_CENTER = "Primary Owner Cost Center";
+    public static final String PRIMARY_OWNER_OFFICE_BUILDING = "Primary Owner Office Building";
+    public static final String PRIMARY_OWNER_PHONE = "Primary Owner Phone";
+    public static final String PRIMARY_OWNER_STATE = "Primary Owner State";
+    public static final String PRIMARY_OWNER_COUNTRY = "Primary Owner Country";
 
     public String getContext(String taskType, String taskOwner){
         return "Task Knowledge: " + getTaskRelatedKnowledge(taskType)
@@ -21,7 +34,7 @@ public class ContextProvider {
                 + "; Task Personalization configuration: " + getPersonalConfiguration(taskOwner);
     }
 
-    public String getTaskRelatedKnowledge(String taskType) {
+    public String getTaskRelatedKnowledge(String adGroupName) {
         List<AdGroupDetailDto> adGroupDetailDtoList = new ArrayList<>();
         try (InputStream is = getClass().getClassLoader().getResourceAsStream("adGroupDetail.txt");
              BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
@@ -36,37 +49,37 @@ public class ContextProvider {
                         String key = keyValue[0].trim();
                         String value = keyValue[1].trim();
                         switch (key) {
-                            case "Group Name":
+                            case GROUP_NAME:
                                 dto.setGroupName(value);
                                 break;
-                            case "Group Summary":
+                            case GROUP_SUMMARY:
                                 dto.setGroupSummary(value);
                                 break;
-                            case "Primary Owner":
+                            case PRIMARY_OWNER:
                                 dto.setPrimaryOwner(value);
                                 break;
-                            case "Secondary Owner":
+                            case SECONDARY_OWNER:
                                 dto.setSecondaryOwner(value);
                                 break;
-                            case "Group Classification":
+                            case GROUP_CLASSIFICATION:
                                 dto.setGroupClassification(value);
                                 break;
-                            case "Primary Owner Supervisor":
+                            case PRIMARY_OWNER_SUPERVISOR:
                                 dto.setPrimaryOwnerSupervisor(value);
                                 break;
-                            case "Primary Owner Cost Center":
+                            case PRIMARY_OWNER_COST_CENTER:
                                 dto.setPrimaryOwnerCostCenter(value);
                                 break;
-                            case "Primary Owner Office Building":
+                            case PRIMARY_OWNER_OFFICE_BUILDING:
                                 dto.setPrimaryOwnerOfficeBuilding(value);
                                 break;
-                            case "Primary Owner Phone":
+                            case PRIMARY_OWNER_PHONE:
                                 dto.setPrimaryOwnerPhone(value);
                                 break;
-                            case "Primary Owner State":
+                            case PRIMARY_OWNER_STATE:
                                 dto.setPrimaryOwnerState(value);
                                 break;
-                            case "Primary Owner Country":
+                            case PRIMARY_OWNER_COUNTRY:
                                 dto.setPrimaryOwnerCountry(value);
                                 break;
                             // Add more fields as needed
@@ -78,7 +91,23 @@ public class ContextProvider {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return adGroupDetailDtoList.toString();
+        List<AdGroupDetailDto> result = adGroupDetailDtoList.stream().filter(dto -> adGroupName.equals(dto.getGroupName())).toList();
+        StringBuilder sb = new StringBuilder();
+        if (!result.isEmpty()) {
+            result.forEach(dto -> sb.append(GROUP_NAME).append(": ").append(dto.getGroupName())
+                    .append(", ").append(GROUP_SUMMARY).append(": ").append(dto.getGroupSummary())
+                    .append(", ").append(PRIMARY_OWNER).append(": ").append(dto.getPrimaryOwner())
+                    .append(", ").append(SECONDARY_OWNER).append(": ").append(dto.getSecondaryOwner())
+                    .append(", ").append(GROUP_CLASSIFICATION).append(": ").append(dto.getGroupClassification())
+                    .append(", ").append(PRIMARY_OWNER_SUPERVISOR).append(": ").append(dto.getPrimaryOwnerSupervisor())
+                    .append(", ").append(PRIMARY_OWNER_COST_CENTER).append(": ").append(dto.getPrimaryOwnerCostCenter())
+                    .append(", ").append(PRIMARY_OWNER_OFFICE_BUILDING).append(": ").append(dto.getPrimaryOwnerOfficeBuilding())
+                    .append(", ").append(PRIMARY_OWNER_PHONE).append(": ").append(dto.getPrimaryOwnerPhone())
+                    .append(", ").append(PRIMARY_OWNER_STATE).append(": ").append(dto.getPrimaryOwnerState())
+                    .append(", ").append(PRIMARY_OWNER_COUNTRY).append(": ").append(dto.getPrimaryOwnerCountry()).append("; "));
+
+        }
+        return sb.toString();
     }
 
     //        return "REQ1: Approved; REQ2: Approved; REQ3: Approved; REQ4: Approved";
