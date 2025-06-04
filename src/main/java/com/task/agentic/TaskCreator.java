@@ -188,8 +188,8 @@ Video settings
 		String response = chatClient.prompt()
 				.user(u -> u.text("{prompt}\n{context}")
 						.param("prompt", this.systemPrompt+"\\n"+task)
-						.param("context", context))
-	//					.param("task", task))
+						.param("context", context)
+						.param("task", task))
 				.call()
 				.content();
 
