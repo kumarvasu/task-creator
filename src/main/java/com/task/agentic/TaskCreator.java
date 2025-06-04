@@ -107,7 +107,7 @@ public class TaskCreator {
 	public String createTask(String task) {
 		List<Response> memory = new ArrayList<>();
 
-		return createTask(task, contextProvider.getContext("One Cert", "Kumar Vasudevan"), memory);
+		return createTask(task, contextProvider.getContext("One Cert", "Kumar Vasudevan", "ADGRP3"), memory);
 	}
 
 	private String createTask(String task, String context, List<Response> memory) {
@@ -131,8 +131,8 @@ public class TaskCreator {
 		Response response = chatClient.prompt()
 				.user(u -> u.text("{prompt}\n{context}")
 						.param("prompt", this.systemPrompt+"\\n"+task)
-						.param("context", context))
-	//					.param("task", task))
+						.param("context", context)
+						.param("task", task))
 				.call()
 				.entity(Response.class);
 

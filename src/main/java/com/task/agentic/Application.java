@@ -16,25 +16,22 @@
 */
 package com.task.agentic;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 // ------------------------------------------------------------
 // EVALUATOR-OPTIMIZER
 // ------------------------------------------------------------
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.task.agentic")
 public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ChatClient.Builder chatClientBuilder) {
+	/*@Bean
+	public void  commandLineRunner(ChatClient.Builder chatClientBuilder) {
 		var chatClient = chatClientBuilder.build();
 		return args -> {
 			String response = new TaskCreator(chatClient).createTask("""
@@ -54,5 +51,5 @@ public class Application {
 
 			System.out.println("FINAL OUTPUT:\n : " + response);
 		};
-	}
+	}*/
 }
