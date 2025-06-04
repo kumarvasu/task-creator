@@ -18,6 +18,7 @@ package com.task.agentic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.ai.ResourceUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.util.Assert;
 
@@ -77,68 +78,7 @@ import org.springframework.util.Assert;
 public class TaskCreator {
 
 	public static final String SYSTEM_PROMPT = """
-			Your goal is to create a task message based on the input. 
-						
-			Input consists of following information. 
-			1. Task details in the JSON format. 
-			2. Detailed description about every field in the JSON
-			3. Historical information of the tasks that was acted by the task owner. It provides whether the task owner has approved or rejected the task and the rationale he has provided for making that decision.
-			4. Provide the output in the following format with below default fields. 
-			5. Add any additional information as per Task Personalization configuration as part of Key Info
-
-			Title: Approval Needed: [Title]
-			Summary: [TaskSummary]
-			Key Info:
-			- Requester Name: [Requestor]
-			- Priority: [priority]
-			- AI Suggestion: [SuggestedAction]
-			- Decision Rationale: [DecisionRationale]
-			- Decision Comment: [DecisionComment]
 			
-			Extract the details from the input json and populate the field value as per below logic.
-			Title - Generate a suitable title using task type, requestor and the parameters provided for the task type
-			Task Summary - Summarize the task details highlighting key information
-			Requestor - Extract from requestor_name field
-			Priority - if no priority field provided, then assign "Normal" priority
-			AI Suggestion - Provide suggested action (either approve or reject) based on the historical information and parameters provided to consider for making the decision
-			Decision Rationale - Provide a short summary of how this decision has been arrived at.
-			Decision Comment - Provide a short comment to be added along with the decision.
-			
-			6. Apply any field filtering if provided. Add any additional information as per Task Personalization configuration as part of Key Info. 
-
-			Return the output as single String - not as JSON. 
-Video settings
-
-
-
-			Here is the exact format to follow, including all quotes and braces:
-Video settings
-
-
-
-			Example:
-			Input:
-			{
-			    "task_id": 100,
-			    "approver_name": "Kumar Vasudevan",
-			    "requestor_name" : "Rajesh V"
-			    "task_type": "One Cert",
-			    "task_details": "Ad group: fglbcadasfdf, owner: G234sfsad",
-			    "task_creation_date": "29-May-2025",
-			    "due_date": "01-June-2025"
-			  }
-			  
-			Output:
-			 			
-			Title: Approval Needed: One Cert Task Requested By Rajesh V
-			Summary: One Cert task requiring attestation that these AD groups are still active and owned by the given owner.
-			Key Info:
-			- Requester Name: Rajesh V
-			- Priority: Normal
-			- AI Suggestion: Approve
-			- Decision Rationale: AD group and the owner details are matching as per OneAD and there is no change in the previous request that was approved by you.
-			- Decision Comment: Approved - AD group ownership verified.
-						
 			
 			""";
 
@@ -148,8 +88,10 @@ Video settings
 
 	private final ContextProvider contextProvider;
 
+	private final TaskPublisher taskPublisher;
+
 	public TaskCreator(ChatClient chatClient) {
-		this(chatClient, SYSTEM_PROMPT);
+		this(chatClient, ResourceUtils.getText("system-prompt.txt"));
 	}
 
 	public TaskCreator(ChatClient chatClient, String systemPrompt) {
@@ -159,20 +101,21 @@ Video settings
 		this.chatClient = chatClient;
 		this.systemPrompt = systemPrompt;
 		this.contextProvider = new ContextProvider();
+		this.taskPublisher = new TaskPublisher();
 	}
 
 	public String createTask(String task) {
-		List<String> memory = new ArrayList<>();
+		List<Response> memory = new ArrayList<>();
 
 		return createTask(task, contextProvider.getContext("One Cert", "Kumar Vasudevan"), memory);
 	}
 
-	private String createTask(String task, String context, List<String> memory) {
+	private String createTask(String task, String context, List<Response> memory) {
 
-		String response = generate(task, context);
+		Response response = generate(task, context);
 		memory.add(response);
 
-		return response;
+		return taskPublisher.publish(response);
 	}
 
 	/**
@@ -184,14 +127,14 @@ Video settings
 	 * @param context Previous attempts and feedback for iterative improvement
 	 * @return A Generation containing the model's thoughts and proposed solution
 	 */
-	private String generate(String task, String context) {
-		String response = chatClient.prompt()
+	private Response generate(String task, String context) {
+		Response response = chatClient.prompt()
 				.user(u -> u.text("{prompt}\n{context}")
 						.param("prompt", this.systemPrompt+"\\n"+task)
 						.param("context", context))
 	//					.param("task", task))
 				.call()
-				.content();
+				.entity(Response.class);
 
 		System.out.println(String.format("\nRESPONSE:\n %s\n",
 				response));
