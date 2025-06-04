@@ -25,10 +25,8 @@ public class TasksController {
 
         return "[{\n" +
                 "\t\"taskId\" : \"abcd1234\",\n" +
-                "\t\"adGroupId\" : \"ADGRP12345\",\n" +
+                "\t\"adGroupId\" : \"ADGRP\",\n" +
                 "\t\"brid\" : \"G01253654\"\n" +
                 " }]";
     }
-
-
 }
