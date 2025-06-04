@@ -1,5 +1,6 @@
 package com.task.agentic.services;
 
+import com.task.agentic.model.TaskDetailsDTO;
 import com.task.agentic.dto.AdGroupDetailDto;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,9 @@ import java.io.InputStreamReader;
 public class TaskProcessorImpl implements TaskProcessor {
 
     @Override
-    public String process(String taskInfo){
-        return taskInfo;
+    public String process(TaskDetailsDTO taskInfo){
+        System.out.println("Task Input : " + taskInfo);
+        return taskInfo.toString();
     }
 
     private AdGroupDetailDto readAdGroupDetail() {
