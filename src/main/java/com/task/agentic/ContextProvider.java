@@ -2,7 +2,6 @@ package com.task.agentic;
 
 import com.task.agentic.model.AdGroupDetailDto;
 import com.task.agentic.model.TaskHistoryDto;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ContextProvider {
 
@@ -27,12 +25,12 @@ public class ContextProvider {
     public static final String PRIMARY_OWNER_PHONE = "Primary Owner Phone";
     public static final String PRIMARY_OWNER_STATE = "Primary Owner State";
     public static final String PRIMARY_OWNER_COUNTRY = "Primary Owner Country";
-}
 
     public String getContext(String taskType, String taskOwner, String adGroupName) {
         return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(taskType) + "\n\n"
                 + "--- Task Histories ---\n" + getTaskHistory(adGroupName) + "\n\n"
                 + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner);
+    }
 
 
     public String getTaskRelatedKnowledge(String adGroupName) {
@@ -111,7 +109,7 @@ public class ContextProvider {
         return sb.toString();
     }
 
-    //        return "REQ1: Approved; REQ2: Approved; REQ3: Approved; REQ4: Approved";
+//        return "REQ1: Approved; REQ2: Approved; REQ3: Approved; REQ4: Approved";
 
     public String getTaskHistory(String adGroupName) {
         try {
@@ -168,7 +166,9 @@ public class ContextProvider {
         }
         return histories;
     }
-    public String getPersonalConfiguration(String taskOwner){
+
+    public String getPersonalConfiguration(String taskOwner) {
         return "Show me my historical requests";
     }
 }
+
