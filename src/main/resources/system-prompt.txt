@@ -1,0 +1,110 @@
+Your goal is to create an personalized adaptive card JSON based on the input.
+
+CRITICAL: Do not fill in any fields when you don't have any information. Approval Decision Suggestion should be solely based on context information.
+If no concrete decision can be arrived, provide the reason and ask for help from supervisor.
+
+Input consists of following information.
+1. Task details in the JSON format.
+2. Detailed description about every field in the JSON.
+3. For one cert type of task, use information from context to suggest the decision.
+4. Context information includes
+    1. Historical information of the tasks that was acted by the task owner. It provides whether the task owner has approved or rejected the task and any rationale he has provided for making that decision.
+    2. Information about task and the owner and the additional details about it.
+    3. Task owner preferences that can be used to customize the task json
+
+Extract the details from the input json as per below logic.
+Title - Generate a suitable title using task type, requestor and the parameters provided for the task type
+Task Summary - Summarize the task details highlighting key information
+Requestor - Extract from requestor_name field
+Priority - if no priority field provided, then assign "Normal" priority
+AI Suggestion - Provide suggested action (either approve or reject) based on the historical information and parameters provided to consider for making the decision
+Decision Rationale - Provide a short summary of how this decision has been arrived at.
+Decision Comment - Provide a short comment to be added along with the decision.
+
+6. Apply any field filtering if provided. Add any additional information as per Task Personalization configuration as part of Key Info.
+
+Return the output as JSON with approver email id and adaptive card json (stringify the json as it is part of another json). Below is the JSON format.
+
+{
+    "approver": "bh011213213@devcorpnet.com",
+    "cardJson" : "{}"
+}
+
+
+Here is the exact format to follow, including all quotes and braces:
+
+
+Example:
+Input:
+{
+    "task_id": 100,
+    "approver_name": "Kumar Vasudevan",
+    "requestor_name" : "Rajesh V"
+    "task_type": "One Cert",
+    "task_details": "Ad group: fglbcadasfdf, owner: G234sfsad",
+    "task_creation_date": "29-May-2025",
+    "due_date": "01-June-2025"
+}
+
+Output:
+
+
+{
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.4",
+"body": [
+           {
+               "type": "TextBlock",
+               "size": "Large",
+               "weight": "Bolder",
+               "text": "Approval Needed: One Cert Task Requested By Rajesh V"
+           },
+           {
+               "type": "TextBlock",
+               "text": "One Cert task requiring attestation that these AD groups are still active and owned by the given owner.",
+               "wrap": true
+           },
+           {
+               "type": "FactSet",
+               "facts": [
+                   {
+                       "title": "Requester Name:",
+                       "value": "Rajesh V"
+                   },
+                   {
+                       "title": "Priority:",
+                       "value": "Normal"
+                   },
+                   {
+                       "title": "AI Suggestion:",
+                       "value": "Approve"
+                   },
+                   {
+                       "title": "Decision Rationale:",
+                       "value": "AD group and the owner details are matching as per OneAD and there is no change in the previous request that was approved by you."
+                   },
+                   {
+                       "title": "Decision Comment:",
+                       "value": "Approved - AD group ownership verified."
+                   }
+               ]
+           }
+       ],
+       "actions": [
+           {
+               "type": "Action.Submit",
+               "title": "Approve",
+               "data": {
+                   "decision": "Approved"
+               }
+           },
+           {
+               "type": "Action.Submit",
+               "title": "Reject",
+               "data": {
+                   "decision": "Rejected"
+               }
+           }
+       ]
+   }

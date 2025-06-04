@@ -27,12 +27,13 @@ public class ContextProvider {
     public static final String PRIMARY_OWNER_PHONE = "Primary Owner Phone";
     public static final String PRIMARY_OWNER_STATE = "Primary Owner State";
     public static final String PRIMARY_OWNER_COUNTRY = "Primary Owner Country";
+}
 
-    public String getContext(String taskType, String taskOwner){
-        return "Task Knowledge: " + getTaskRelatedKnowledge(taskType)
-                + "; Historical Requests: " + getTaskHistory(taskType, taskOwner)
-                + "; Task Personalization configuration: " + getPersonalConfiguration(taskOwner);
-    }
+    public String getContext(String taskType, String taskOwner, String adGroupName) {
+        return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(taskType) + "\n\n"
+                + "--- Task Histories ---\n" + getTaskHistory(adGroupName) + "\n\n"
+                + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner);
+
 
     public String getTaskRelatedKnowledge(String adGroupName) {
         List<AdGroupDetailDto> adGroupDetailDtoList = new ArrayList<>();
@@ -112,14 +113,14 @@ public class ContextProvider {
 
     //        return "REQ1: Approved; REQ2: Approved; REQ3: Approved; REQ4: Approved";
 
-    public String getTaskHistory(String taskType, String taskOwner) {
+    public String getTaskHistory(String adGroupName) {
         try {
             List<TaskHistoryDto> histories = getTaskHistories();
             StringBuilder sb = new StringBuilder();
             for (TaskHistoryDto history : histories) {
-                if (history.getAdGroupName().equalsIgnoreCase(taskType)
-                        && history.getAdGroupOwner().equalsIgnoreCase(taskOwner)) {
+                if (history.getAdGroupName().equalsIgnoreCase(adGroupName)) {
                     sb.append("TaskId: ").append(history.getTaskId())
+                            .append(", AD Group Name: ").append(history.getAdGroupName())
                             .append(", Status: ").append(history.getStatus())
                             .append(", Owner: ").append(history.getAdGroupOwner())
                             .append(", Date: ").append(history.getDate())
@@ -127,7 +128,7 @@ public class ContextProvider {
                 }
             }
             if (sb.length() == 0) {
-                return "No history found for task type: " + taskType + " and owner: " + taskOwner;
+                return "No history found for AD Group Name: " + adGroupName;
             }
             return sb.toString();
         } catch (IOException e) {
