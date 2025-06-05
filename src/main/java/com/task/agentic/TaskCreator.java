@@ -21,6 +21,7 @@ import java.util.List;
 import com.task.agentic.model.TaskDetailsDTO;
 import org.springframework.ai.ResourceUtils;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.util.Assert;
 
 /**
@@ -133,6 +134,7 @@ public class TaskCreator {
 						.param("prompt", this.systemPrompt+"\\n"+task)
 						.param("context", context)
 						.param("task", task))
+				.advisors(new SimpleLoggerAdvisor())
 				.call()
 				.entity(Response.class);
 

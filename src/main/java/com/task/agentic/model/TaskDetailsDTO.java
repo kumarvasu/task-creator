@@ -7,6 +7,7 @@ public class TaskDetailsDTO {
 
     Long task_id;
     String approver_name;
+    String approver_email;
     String requestor_name;
     String task_type;
     String task_details;
@@ -14,6 +15,15 @@ public class TaskDetailsDTO {
     String owner;
     String task_creation_date;
     String due_date;
+
+
+    public void setApprover_email(String approver_email) {
+        this.approver_email = approver_email;
+    }
+
+    public String getApprover_email() {
+        return approver_email;
+    }
 
     public Long getTask_id() {
         return task_id;
@@ -92,6 +102,7 @@ public class TaskDetailsDTO {
         return "TaskDetailsDTO{" +
                 "task_id=" + task_id +
                 ", approver_name='" + approver_name + '\'' +
+                ", approver_email='" + approver_email + '\'' +
                 ", requestor_name='" + requestor_name + '\'' +
                 ", task_type='" + task_type + '\'' +
                 ", task_details='" + task_details + '\'' +

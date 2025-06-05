@@ -20,16 +20,19 @@ Priority - if no priority field provided, then assign "Normal" priority
 AI Suggestion - Provide suggested action (either approve or reject) based on the historical information and parameters provided to consider for making the decision
 Decision Rationale - Provide a short summary of how this decision has been arrived at.
 Decision Comment - Provide a short comment to be added along with the decision.
+Approver - For approver field, use approver_email field from input details
 
 6. Apply any field filtering if provided. Add any additional information as per Task Personalization configuration as part of Key Info.
 
-Return the output as JSON with approver email id and adaptive card json (stringify the json as it is part of another json). Below is the JSON format.
+Return the output as JSON with approver email id and adaptive card json (stringify the json as it is part of another json). Approver email id should be extracted from the task details from "approver_email" field. Do not use approver_name field.
+Below is the JSON format.
 
 {
     "approver": "bh011213213@devcorpnet.com",
     "cardJson" : "{}"
 }
 
+Use the adaptive card template provided and replace the placeholder values from the task details.
 
 Here is the exact format to follow, including all quotes and braces:
 
@@ -39,6 +42,7 @@ Input:
 {
     "task_id": 100,
     "approver_name": "Kumar Vasudevan",
+    "approver_email": "BH01126630@devcorptenant.com",
     "requestor_name" : "Rajesh V"
     "task_type": "One Cert",
     "task_details": "Ad group: fglbcadasfdf, owner: G234sfsad",
@@ -50,61 +54,6 @@ Output:
 
 
 {
-"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-"type": "AdaptiveCard",
-"version": "1.4",
-"body": [
-           {
-               "type": "TextBlock",
-               "size": "Large",
-               "weight": "Bolder",
-               "text": "Approval Needed: One Cert Task Requested By Rajesh V"
-           },
-           {
-               "type": "TextBlock",
-               "text": "One Cert task requiring attestation that these AD groups are still active and owned by the given owner.",
-               "wrap": true
-           },
-           {
-               "type": "FactSet",
-               "facts": [
-                   {
-                       "title": "Requester Name:",
-                       "value": "Rajesh V"
-                   },
-                   {
-                       "title": "Priority:",
-                       "value": "Normal"
-                   },
-                   {
-                       "title": "AI Suggestion:",
-                       "value": "Approve"
-                   },
-                   {
-                       "title": "Decision Rationale:",
-                       "value": "AD group and the owner details are matching as per OneAD and there is no change in the previous request that was approved by you."
-                   },
-                   {
-                       "title": "Decision Comment:",
-                       "value": "Approved - AD group ownership verified."
-                   }
-               ]
-           }
-       ],
-       "actions": [
-           {
-               "type": "Action.Submit",
-               "title": "Approve",
-               "data": {
-                   "decision": "Approved"
-               }
-           },
-           {
-               "type": "Action.Submit",
-               "title": "Reject",
-               "data": {
-                   "decision": "Rejected"
-               }
-           }
-       ]
-   }
+    "approver": "BH01126630@devcorptenant.com",
+    "cardJson": "{\"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\"type\": \"AdaptiveCard\",\"version\": \"1.4\",\"body\": [{\"type\": \"TextBlock\",\"size\": \"Large\",\"weight\": \"Bolder\",\"text\": \"Approval Needed: One Cert Task Requested By Praveen Kalla\"},{\"type\": \"TextBlock\",\"text\": \"One Cert task requiring attestation that these AD groups are still active and owned by the given owner.\",\"wrap\": true},{\"type\": \"FactSet\",\"facts\": [{\"title\": \"Requester Name:\",\"value\": \"Praveen Kalla\"},{\"title\": \"Priority:\",\"value\": \"Normal\"},{\"title\": \"AI Suggestion:\",\"value\": \"Reject\"},{\"title\": \"Decision Rationale:\",\"value\": \"Based on historical data, previous requests have been consistently rejected. Further validation may be needed to verify AD group ownership.\"},{\"title\": \"Decision Comment:\",\"value\": \"Rejected - Please verify AD group ownership.\"}]}],\"actions\": [{\"type\": \"Action.Submit\",\"title\": \"Approve\",\"data\": {\"decision\": \"Approved\"}},{\"type\": \"Action.Submit\",\"title\": \"Reject\",\"data\": {\"decision\": \"Rejected\"}}]}"
+}

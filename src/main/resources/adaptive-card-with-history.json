@@ -1,0 +1,159 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "ColumnSet",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "Container",
+              "style": "default",
+              "spacing": "large",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "{title}",
+                  "weight": "bolder",
+                  "size": "extraLarge",
+                  "wrap": true,
+                  "horizontalAlignment": "left",
+                  "color": "accent"
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "Due: {dueDate}",
+                  "horizontalAlignment": "left",
+                  "color": "Attention",
+                  "size": "small",
+                  "weight": "Bolder",
+                  "wrap": true,
+                  "spacing": "small"
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "**{taskDescription}**",
+                  "size": "large",
+                  "weight": "Bolder",
+                  "wrap": true,
+                  "horizontalAlignment": "left"
+                },
+                {
+                  "type": "Container",
+                  "spacing": "Large",
+                  "style": "emphasis",
+                  "items": [
+                    {
+                      "type": "FactSet",
+                      "facts": [
+                        {
+                          "title": "Request Details:",
+                          "value": "{requestDetails}"
+                        },
+                        {
+                          "title": "Requester Name",
+                          "value": "{requesterName}"
+                        },
+                        {
+                          "title": "AI Suggestion:",
+                          "value": "{aiSuggestion}"
+                        },
+                        {
+                          "title": "Decision Rationale",
+                          "value": "{decisionRationale}"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "ActionSet",
+                  "id": "showButton",
+                  "actions": [
+                    {
+                      "type": "Action.ToggleVisibility",
+                      "title": "▶ Show Last 3 Requests",
+                      "targetElements": ["historyPanel", "hideButton", "showButton"]
+                    }
+                  ]
+                },
+                {
+                  "type": "ActionSet",
+                  "id": "hideButton",
+                  "isVisible": false,
+                  "actions": [
+                    {
+                      "type": "Action.ToggleVisibility",
+                      "title": "▼ Hide Last 3 Requests",
+                      "targetElements": ["historyPanel", "hideButton", "showButton"]
+                    }
+                  ]
+                },
+                {
+                  "type": "Container",
+                  "id": "historyPanel",
+                  "isVisible": false,
+                  "items": [
+                    {
+                      "type": "TextBlock",
+                      "text": "Last 3 Requests",
+                      "weight": "Bolder",
+                      "spacing": "Medium"
+                    },
+                    {
+                      "type": "TextBlock",
+                      "text": "{historyRequest1}",
+                      "wrap": true
+                    },
+                    {
+                      "type": "TextBlock",
+                      "text": "{historyRequest2}",
+                      "wrap": true
+                    },
+                    {
+                      "type": "TextBlock",
+                      "text": "{historyRequest3}",
+                      "wrap": true
+                    }
+                  ]
+                },
+                {
+                  "type": "Input.Text",
+                  "id": "supervisorComment",
+                  "placeholder": "Add your comment here",
+                  "label": "Supervisor Comment",
+                  "isMultiline": true,
+                  "spacing": "Large"
+                }
+              ],
+              "bleed": true
+            }
+          ]
+        }
+      ],
+      "bleed": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Approve",
+      "style": "positive",
+      "data": {
+        "action": "approve"
+      }
+    },
+    {
+      "type": "Action.Submit",
+      "title": "Reject",
+      "style": "destructive",
+      "data": {
+        "action": "reject"
+      }
+    }
+  ]
+}

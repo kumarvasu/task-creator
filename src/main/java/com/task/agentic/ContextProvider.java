@@ -2,6 +2,7 @@ package com.task.agentic;
 
 import com.task.agentic.model.AdGroupDetailDto;
 import com.task.agentic.model.TaskHistoryDto;
+import org.springframework.ai.ResourceUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +30,8 @@ public class ContextProvider {
     public String getContext(String taskOwner, String adGroupName) {
         return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(adGroupName) + "\n\n"
                 + "--- Task Histories ---\n" + getTaskHistory(adGroupName) + "\n\n"
-                + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner);
+                + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner)
+                + "--- Adaptive card template ---\n" + getTemplateText(taskOwner);
     }
 
 
@@ -166,11 +168,20 @@ public class ContextProvider {
         }
         return histories;
     }
-    public String getPersonalConfiguration(String taskOwner){
+    public String getPersonalConfiguration(String taskOwner) {
         if ("BH01126630@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
             return "Detailed configuration: Show last three historical requests, preferences, and Key Information. If the taskOwner does not have three historical requests, show all availble historical requests.";
-        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)){
+        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
             return "Show Title and Summary only.";
+        }
+        return "";
+    }
+
+    public String getTemplateText(String taskOwner) {
+        if ("BH01126630@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
+            return ResourceUtils.getText("adaptive-card-with-history.json");
+        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
+            return ResourceUtils.getText("adaptive-card-with-history.json");
         }
         return "";
     }
