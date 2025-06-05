@@ -1,3 +1,3 @@
-task_id: 123, AD_GROUP_NAME: ADGRP1, AD_GROUP_OWNER_NAME: G234sfsab, task_status: Approved, date: 29-May-2025;
-task_id: 124, AD_GROUP_NAME: ADGRP2, AD_GROUP_OWNER_NAME: G234sfsac, task_status: Rejected, date: 30-May-2025;
-task_id: 125, AD_GROUP_NAME: ADGRP3, AD_GROUP_OWNER_NAME: G234sfsad, task_status: Approved, date: 31-May-2025;
+task_id: 123, AD_GROUP_NAME: ADGRP1, AD_GROUP_OWNER_NAME: BH01126630@devcorptenant.com, task_status: Approved, date: 29-May-2025;
+task_id: 124, AD_GROUP_NAME: ADGRP2, AD_GROUP_OWNER_NAME: BH01483157@devcorptenant.com, task_status: Rejected, date: 30-May-2025;
+task_id: 125, AD_GROUP_NAME: ADGRP3, AD_GROUP_OWNER_NAME: BH01126630@devcorptenant.com, task_status: Approved, date: 31-May-2025;

@@ -26,8 +26,8 @@ public class ContextProvider {
     public static final String PRIMARY_OWNER_STATE = "Primary Owner State";
     public static final String PRIMARY_OWNER_COUNTRY = "Primary Owner Country";
 
-    public String getContext(String taskType, String taskOwner, String adGroupName) {
-        return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(taskType) + "\n\n"
+    public String getContext(String taskOwner, String adGroupName) {
+        return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(adGroupName) + "\n\n"
                 + "--- Task Histories ---\n" + getTaskHistory(adGroupName) + "\n\n"
                 + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner);
     }
@@ -166,9 +166,12 @@ public class ContextProvider {
         }
         return histories;
     }
-
-    public String getPersonalConfiguration(String taskOwner) {
-        return "Show me my historical requests";
+    public String getPersonalConfiguration(String taskOwner){
+        if ("BH01126630@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
+            return "Detailed configuration: Show last three historical requests, preferences, and Key Information. If the taskOwner does not have three historical requests, show all availble historical requests.";
+        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)){
+            return "Show Title and Summary only.";
+        }
+        return "";
     }
 }
-

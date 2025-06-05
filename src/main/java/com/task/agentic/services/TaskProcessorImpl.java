@@ -24,7 +24,7 @@ public class TaskProcessorImpl implements TaskProcessor {
 					<user input>
 					%s
 					</user input>
-					""".formatted(json));
+					""".formatted(json), taskInfo);
         return taskInfo.toString();
     }
 

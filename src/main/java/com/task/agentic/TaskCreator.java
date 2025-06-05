@@ -18,6 +18,7 @@ package com.task.agentic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.task.agentic.model.TaskDetailsDTO;
 import org.springframework.ai.ResourceUtils;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.util.Assert;
@@ -104,17 +105,16 @@ public class TaskCreator {
 		this.taskPublisher = new TaskPublisher();
 	}
 
-	public String createTask(String task) {
+	public String createTask(String task, TaskDetailsDTO taskDetailsDTO) {
 		List<Response> memory = new ArrayList<>();
 
-		return createTask(task, contextProvider.getContext("One Cert", "Kumar Vasudevan", "ADGRP3"), memory);
+		return createTask(task, contextProvider.getContext(taskDetailsDTO.getOwner(), taskDetailsDTO.getAdGroup()), memory);
 	}
 
 	private String createTask(String task, String context, List<Response> memory) {
 
 		Response response = generate(task, context);
 		memory.add(response);
-
 		return taskPublisher.publish(response);
 	}
 
