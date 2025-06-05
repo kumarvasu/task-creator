@@ -30,7 +30,7 @@ public class ContextProvider {
     public String getContext(String taskOwner, String adGroupName) {
         return "--- Task Knowledge ---\n" + getTaskRelatedKnowledge(adGroupName) + "\n\n"
                 + "--- Task Histories ---\n" + getTaskHistory(adGroupName) + "\n\n"
-                + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner)
+                + "--- Task Personalization Configuration ---\n" + getPersonalConfiguration(taskOwner) + "\n\n"
                 + "--- Adaptive card template ---\n" + getTemplateText(taskOwner);
     }
 
@@ -170,9 +170,9 @@ public class ContextProvider {
     }
     public String getPersonalConfiguration(String taskOwner) {
         if ("BH01126630@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
-            return "Detailed configuration: Show last three historical requests, preferences, and Key Information. If the taskOwner does not have three historical requests, show all availble historical requests.";
-        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
-            return "Show Title and Summary only.";
+            return "Detailed configuration: Show last three historical requests for that AD Group Name. If we have less than three requests, show available historical requests.";
+        } else if ("BH01285321@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
+            return "Show Title and Summary attributes along with approval comments box and action buttons.";
         }
         return "";
     }
@@ -180,8 +180,8 @@ public class ContextProvider {
     public String getTemplateText(String taskOwner) {
         if ("BH01126630@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
             return ResourceUtils.getText("adaptive-card-with-history.json");
-        } else if ("BH01483157@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
-            return ResourceUtils.getText("adaptive-card-with-history.json");
+        } else if ("BH01285321@devcorptenant.com".equalsIgnoreCase(taskOwner)) {
+            return ResourceUtils.getText("adaptive-card-plain.json");
         }
         return "";
     }

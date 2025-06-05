@@ -107,15 +107,12 @@ public class TaskCreator {
 	}
 
 	public String createTask(String task, TaskDetailsDTO taskDetailsDTO) {
-		List<Response> memory = new ArrayList<>();
-
-		return createTask(task, contextProvider.getContext(taskDetailsDTO.getOwner(), taskDetailsDTO.getAdGroup()), memory);
+		return createTask(task, contextProvider.getContext(taskDetailsDTO.getApprover_email(), taskDetailsDTO.getAdGroup()));
 	}
 
-	private String createTask(String task, String context, List<Response> memory) {
+	private String createTask(String task, String context) {
 
 		Response response = generate(task, context);
-		memory.add(response);
 		return taskPublisher.publish(response);
 	}
 
@@ -136,7 +133,9 @@ public class TaskCreator {
 						.param("task", task))
 				.advisors(new SimpleLoggerAdvisor())
 				.call()
-				.entity(Response.class);
+						.entity(Response.class);
+				//.content();
+
 
 		System.out.println(String.format("\nRESPONSE:\n %s\n",
 				response));

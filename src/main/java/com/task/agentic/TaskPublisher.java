@@ -56,24 +56,18 @@ public class TaskPublisher {
     }
 
 
-    public String publish(Response response1) {
+    public String publish(Response jsonPayload) {
         String url = null;
         try {
             url = encodeUrl();
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        String jsonPayload = null;
-        try {
-            jsonPayload = new ObjectMapper().writeValueAsString(response1);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPost postRequest = new HttpPost(url);
             postRequest.setHeader("Content-Type", "application/json");
-            postRequest.setEntity(new StringEntity(jsonPayload));
+            postRequest.setEntity(new StringEntity(new ObjectMapper().writeValueAsString(jsonPayload)));
 
             try (ClassicHttpResponse response = httpClient.execute(postRequest)) {
                 System.out.println("Response Code: " + response.getCode());

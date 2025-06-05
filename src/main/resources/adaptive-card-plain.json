@@ -1,0 +1,58 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "{}",
+      "weight": "bolder",
+      "size": "extraLarge",
+      "wrap": true,
+      "horizontalAlignment": "left",
+      "color": "accent"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Due: {}",
+      "horizontalAlignment": "left",
+      "color": "Attention",
+      "size": "small",
+      "weight": "Bolder",
+      "wrap": true,
+      "spacing": "small"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Requested by: {}",
+      "size": "medium",
+      "weight": "Bolder",
+      "wrap": true,
+      "horizontalAlignment": "left"
+    },
+    {
+      "type": "TextBlock",
+      "text": "{}",
+      "wrap": true,
+      "spacing": "medium"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Approve",
+      "style": "positive",
+      "data": {
+        "action": "approve"
+      }
+    },
+    {
+      "type": "Action.Submit",
+      "title": "Reject",
+      "style": "destructive",
+      "data": {
+        "action": "reject"
+      }
+    }
+  ]
+}

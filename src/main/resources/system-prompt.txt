@@ -32,7 +32,7 @@ Below is the JSON format.
     "cardJson" : "{}"
 }
 
-Use the adaptive card template provided and replace the placeholder values from the task details.
+Use the adaptive card template provided and replace the placeholder values from the task details. Always add action buttons Approve and Reject
 
 Here is the exact format to follow, including all quotes and braces:
 
